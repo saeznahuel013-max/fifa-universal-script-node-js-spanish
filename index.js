@@ -1,26 +1,26 @@
 const net = require('net');
 
-// Railway asigna el puerto automáticamente en process.env.PORT
+// Railway asigna el puerto automáticamente en la variable PORT
 const PORT = process.env.PORT || 42124;
 
 const server = net.createServer((socket) => {
-    console.log(`[+] Conexión recibida de: ${socket.remoteAddress}:${socket.remotePort}`);
+    console.log('[+] PS3 conectada desde: ' + socket.remoteAddress);
 
-    // El "Código Mágico" de login para FIFA (Bypass)
-    // Equivale a 000000010000000000000000 en hexadecimal
-    const response = Buffer.from("000000010000000000000000", "hex");
+    // El código hexadecimal mágico para FIFA 15 (Bypass)
+    // Debe enviarse como un Buffer de 12 bytes
+    const bypassCode = Buffer.from('000000010000000000000000', 'hex');
 
-    // Enviamos la respuesta y cerramos la conexión inmediatamente
-    socket.write(response, () => {
-        console.log("[!] Bypass enviado. Cerrando conexión.");
-        socket.end();
-    });
+    socket.write(bypassCode);
+    console.log('[✓] Código de bypass enviado con éxito.');
 
     socket.on('error', (err) => {
-        console.error(`[!] Error en el socket: ${err.message}`);
+        console.log('[!] Error en la conexión: ' + err.message);
     });
+
+    // Cerramos la conexión después de enviar para que el juego prosiga
+    socket.end();
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-    console.log(`[*] Servidor Node.js activo en puerto: ${PORT}`);
+    console.log(`[*] Servidor FIFA 15 (Node.js) activo en puerto: ${PORT}`);
 });
